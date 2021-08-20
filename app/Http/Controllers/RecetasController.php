@@ -16,7 +16,12 @@ class RecetasController extends Controller
     {
         
         $recetas =['recetas pizza','receta hamburguesa','receta tacos'];
-        //return view('recetas.index')->with('recetas',$recetas);
-        return view('recetas.index',compact('recetas'));
+        $categorias=['comida mexicana','comida boliviana','postres'];
+
+        return view('recetas.index')
+                    ->with('recetas',$recetas)
+                    ->with('categorias',$categorias);
+        
+        //return view('recetas.index',compact('recetas'));
     }
 }

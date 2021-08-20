@@ -1,0 +1,47 @@
+Agregar Login y autentitacion
+
+-para habilitar la autentitacion de login y luego crear
+    composer require laravel/ui
+    php artisan ui:auth
+-esto crea vistas sin estilos pero te dejan a disposicion 
+y database 
+_____________________________________________________________________________
+
+Que son las migraciones
+-en laravel son control de las versiones para la base de datos
+-te permite modificar y compartir el schema de bd
+-se puede generar la migracion al crear el modelo
+    php artisan make:model <Nombre> --m
+-una vez creada la migracion podras ejecutarla con artisan
+....................................
+Tipos de columnas:
+en tus migraciones
+
+bigIncrements       ideal para PK.
+char                tipo char
+float               Numero con Decimales
+integer             Numero enteros
+string              tipo Varchar
+text                tipo Text
+
+-para migrar la base de datos  
+    php artisan migrate
+-para deshacer las migraciones
+    php artisan migrate:rollback
+_____________________________________________________________________________
+Añadir Bootstrap y VueJS al proyecto
+
+    php artisan ui Bootstrap
+    php artisan ui vue
+    npm install
+-para correr pero antes actualizar con (npm update)
+    npm run dev
+-para que se mantenga compilando todo el tiempo
+ el npm (solo ocurre en archivos de sass como los de JavaScript)
+    npm run watch
+_____________________________________________________________________________
+Ajustes al diseño y fuentes de google
+
+en la carpeta sass
+-app.scss es quien controla todo sus estilos (_<nombre>.scss)...ahi se importa desde google font el @import
+-_variables.scss se pueden crear variables de estilos
