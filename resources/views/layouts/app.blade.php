@@ -15,7 +15,10 @@
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-
+    <!-- C1
+        Creando un yield para el Trix para stilos y scripts en la parte de abajo
+    -->
+    @yield('styles')
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
@@ -74,10 +77,20 @@
                 </div>
             </div>
         </nav>
+        <div class="conatiner">
+            <div class="row">
 
-        <main class="py-4">
-            @yield('content')
-        </main>
+                <div class="py-4 mt-5  col-12">
+                    @yield('botones')
+                </div>        
+
+                <main class="py-4 mt-5 col-12">
+                    @yield('content')
+                </main>
+            </div>
+        </div>
+
     </div>
+    @yield('scripts')
 </body>
 </html>

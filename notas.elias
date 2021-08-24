@@ -45,3 +45,24 @@ Ajustes al diseño y fuentes de google
 en la carpeta sass
 -app.scss es quien controla todo sus estilos (_<nombre>.scss)...ahi se importa desde google font el @import
 -_variables.scss se pueden crear variables de estilos
+
+_____________________________________________________________________________
+INSTALAR PAQUETE PARA IDIOMA ESPAÑOL
+    composer require laraveles/spanish
+-ahora una vez habilitado el laraveles lo instalamos con:
+    php artisan laraveles:install-lang
+-configurar en app-config-app el en por es
+_____________________________________________________________________________
+CREAR URLs PROTEGIDAS EN LARAVEL
+ EN EL controller agregamos un constructor =>RecetaController.php A1
+_____________________________________________________________________________
+14. PASANDO LAS CATEGORIAS DE LA BD A LA VISTA
+en el controlador =>RecetaController.php B1
+_____________________________________________________________________________
+16.AÑADIEDNO TRIX Editor
+de la pagina cdn https://cdnjs.com/libraries/trix
+
+como solo necesitaremos en create pues olo configuramos en layouts.blade.php => C1
+tanto para stilos y scripts...
+en el input que pertenezca debe ser de tipo hidden
+la sintaxis para agregar el editor es trix-editor
