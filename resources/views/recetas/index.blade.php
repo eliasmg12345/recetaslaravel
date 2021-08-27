@@ -7,6 +7,8 @@
 @section('content')
     
     <h2 class="text-center mb-5">Administra tus recetas</h2>
+
+
     <div class="col-md-10 mx-auto bg-white p-3">
         <table class="table">
             <thead class="bg-primary text-light">
@@ -17,13 +19,18 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td>
-
-                    </td>
-                </tr>  
+                @foreach ($recetas as $rec)
+                    <tr>
+                        <td>{{$rec->titulo}}</td>
+                        <td>{{$rec->categoria_id}}</td>
+                        <td>
+                            <a href="" class="btn btn-danger">Eliminar</a>
+                            <a href="" class="btn btn-dark">Editar</a>
+                            <a href="" class="btn btn-success">Ver</a>
+                        </td>
+                    </tr> 
+                @endforeach
+                 
                 
             </tbody>
         </table>

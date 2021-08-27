@@ -65,4 +65,73 @@ de la pagina cdn https://cdnjs.com/libraries/trix
 como solo necesitaremos en create pues olo configuramos en layouts.blade.php => C1
 tanto para stilos y scripts...
 en el input que pertenezca debe ser de tipo hidden
-la sintaxis para agregar el editor es trix-editor
+la sintaxis para agregar el editor es trix-editor e indicarle que input se le va a agregar
+_____________________________________________________________________________
+19. Almacenando imagenes en la base de datos
+en el controller =>D1
+y agregandole en html el enctype="multipart/form-dada"
+-para crear un enlace simbolico de la imagen:
+    php artisan storage:link
+-para su validacion en el controller obtenemos la ruta de la imagen =>D2
+_____________________________________________________________________________
+20. EFECTOS DE LA IMAGEN
+para hacer ajustes de la imagen
+en la pagina http://image.intervention.io
+-como en  laravel no permite añadirle efectos 
+-tenemos que instalar 
+    composer require intervention/image
+-en el controller =>E1
+
+Intervention\Image\ImageServiceProvider::class
+'Image' => Intervention\Image\Facades\Image::class
+
+_____________________________________________________________________________
+
+============ INTRODUCCIONES A LOS MODELOS Y ELOQUENT ===============
+
+1. QUE ES ELOQUENT ORM
+
+EL ORM que viene en laravel su nombre es ELOQUENT
+-te va a permitir conectar los objetos de una aplicacion con las tablas en una base de datos
+-gracias a un ORM es facil realizar las operaciones de una BD en lugar de cosigo SQL
+-cada framework tiene su propio ORM
+-el ORM funciona usualmente sobre la M del MVC 
+-cada tabla debera tener un modelo asociado a ella para tener las diferentes relaciones
+- para crear un modelo...como es una clase se usa mayuscula:
+    php artisan make:model <Nombre>
+-se secomienda que mantengas el nombre que laravel crea
+- el ORM funciona sobre el Modelo, el Modelo siempre esta conectado en la base de datos y 
+el ORM se encarga de la relacion entre diferentes modelos.
+-Eloquent cuenta con una serie de funciones para definir las relaciones entre tablas
+......................................
+- son seis 6
+- la 1ra --relacion uno a uno
+    1:1 -> hasOne
+- la 2da --relacion uno a muchos
+    1:n -> hasMany
+- la 3ra --relacion de muchos a muchos
+    n:n -> belongsToMany
+hay otras que van en el sentido inverso
+- la 4ta --relacion uno a uno
+    1:1 -> belongsTo
+- la 5ta --relacion uno a muchos
+    n:1 -> belongsTo
+- la 6ta --relacion de muchos a muchos
+    n:n -> belongsToMany
+__________________________________________________________________________
+
+2. Creando una relacion 1n entre Usuarios y Recetas
+
+-en el modelo User.php => F1 crearemos una funcion con el nombre que queramos
+-luego reejecutamos nuevamente el sevidor por los cambios
+
+-probaremos con el tinker para hacer algunas interacciones
+>>> $us=User::find(1);
+>>> $us->recetas        //con esto vemos la forma en que se relaciona... son colecciones
+                        //es un arreglo ....de esta manera tenemos una relacion de los usuarios hacia sus recetas
+                        //de esta manera tenemos una instancia de usuario y vamos guardando toda la informacion
+_____________________________________________________________________________
+3. Obtener las recetas creadas por un usuario con Eloquent
+en el index colocando Auth::user()->recetas   ... =>G1
+_____________________________________________________________________________
+4. 
