@@ -22,11 +22,11 @@
                 @foreach ($recetas as $rec)
                     <tr>
                         <td>{{$rec->titulo}}</td>
-                        <td>{{$rec->categoria_id}}</td>
+                        <td>{{$rec->categoria->nombre}}</td>
                         <td>
                             <a href="" class="btn btn-danger">Eliminar</a>
-                            <a href="" class="btn btn-dark">Editar</a>
-                            <a href="" class="btn btn-success">Ver</a>
+                            <a href="{{route('recetas.edit',['receta'=>$rec->id])}}" class="btn btn-dark">Editar</a>
+                            <a href="{{route('recetas.show',['receta'=>$rec->id])}}" class="btn btn-success">Ver</a>
                         </td>
                     </tr> 
                 @endforeach

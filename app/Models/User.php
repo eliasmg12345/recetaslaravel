@@ -45,8 +45,11 @@ class User extends Authenticatable
 
     //F1-
     //Relacion de 1:n de Usuario a Recetas 
+    //en esta parte se va a ir definiendo lo que se vaya agregando lo que el usuario 
+    // vaya creando
     public function recetas(){
         //con estodoremos que este modelo User tendra una relacion de 1n(hasMany) con el modelo de receta
+        //
         return $this->hasMany(Receta::class);
     }
 }

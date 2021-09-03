@@ -10,12 +10,15 @@
 
 @section('content')
     
-    <h2 class="text-center mb-5">Crear tus recetas</h2>
+    <h2 class="text-center mb-5">Editar receta: {{$receta->titulo}}</h2>
     
     <div class="row justify-content-center mt-5" >
         <div class="col-md-8">
-            <form action="{{route('recetas.store')}}" method="post" enctype="multipart/form-data" novalidate>
+            <form action="{{route('recetas.update',['receta'=>$receta->id])}}" method="post" enctype="multipart/form-data" novalidate>
                 @csrf
+
+                @method('PUT')
+
                 <div class="form-group">
                     <label for="titulo">Titulo Receta</label>
                     {{--    para que me resalte el cuadro de alrrta usammos:
@@ -23,7 +26,13 @@
 
                             y para que mantenga el campo se usa el old que es el ultimo request previo
                     --}}
-                    <input type="text" name="titulo" class="form-control @error('titulo') is-invalid @enderror" id="titulo" placeholder="titulo receta" value="{{old('titulo')}}">    
+                    <input type="text" 
+                        name="titulo" 
+                        class="form-control @error('titulo') is-invalid @enderror" 
+                        id="titulo" 
+                        placeholder="titulo receta" 
+                        value="{{$receta->titulo}}"
+                    >    
                     {{--directiva de laravel para validadcion es el @error
                         el message lo genera automaticamente laravel--}}
                     @error('titulo')
@@ -35,12 +44,16 @@
 
                 <div class="form-group">
                     <label for="categoria">CAtegoria</label>
-                    <select name="categoria" class="form-control @error('categoria') is-invalid   @enderror " id="categoria" >
+                    <select 
+                        name="categoria" 
+                        class="form-control @error('categoria') is-invalid   @enderror " 
+                        id="categoria" 
+                    >
                             <option value="">--Seleccione--</option>
                         @foreach ($categorias as $categoria)
                             <option 
                                 value="{{$categoria->id}}"
-                                {{old('categoria')==$categoria->id?'selected':''}}
+                                {{$receta->categoria_id==$categoria->id?'selected':''}}
                                 >{{$categoria->nombre}}</option>    
                         @endforeach
                         
@@ -54,12 +67,10 @@
 
                 <div class="form-group mt-3">
                     <label for="preparacion">Preparacion</label>
-                    <input type="hidden" name="preparacion" id="preparacion" value="{{old('preparacion')}}">
+                    <input type="hidden" name="preparacion" id="preparacion" value="{{$receta->preparacion}}">
 
                     <trix-editor
-                        class=" form-control @error('preparacion')
-                            is-invalid
-                        @enderror"
+                        class=" form-control @error('preparacion') is-invalid @enderror"
                         input="preparacion"
                     
                     ></trix-editor>
@@ -73,7 +84,7 @@
 
                 <div class="form-group mt-3">
                     <label for="ingredientes">Ingredientes</label>
-                    <input type="hidden" name="ingredientes" id="ingredientes" value="{{old('ingredientes')}}">
+                    <input type="hidden" name="ingredientes" id="ingredientes" value="{{$receta->ingredientes}}">
 
                     <trix-editor 
                         class=" form-control @error('ingredientes')
@@ -97,6 +108,10 @@
                         class="form-control @error('imagen') is-invalid @enderror"
                         name="imagen"
                     >
+                    <div class="mt-4">
+                        <p>Imagen actuak</p>
+                        <img class="img-thumbnail" src="/storage/{{$receta->imagen}}" style="width: 300px" alt="">
+                    </div>
                     @error('ingredientes') 
                         <span class="invalid-feedback d-block" role="alert">
                             <strong>{{$message}}</strong>

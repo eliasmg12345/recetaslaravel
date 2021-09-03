@@ -134,4 +134,85 @@ _____________________________________________________________________________
 3. Obtener las recetas creadas por un usuario con Eloquent
 en el index colocando Auth::user()->recetas   ... =>G1
 _____________________________________________________________________________
-4. 
+4. crearemos el modelo CategoriaRecetas
+    php artisan make:model CategoriaRecetas
+veremos como obtener las categorias con modelo ...en el controlador =>H1
+con esto modificariamos en el blade el foreach como solo as $categorias------{{$cateogoria->id}} {{$cateogoria->nombre}}
+_____________________________________________________________________________
+5. Creando una relacion 1 1 entre receetas y categorias
+-en la tabla recetas tenemos una llave foranea categoria_id...de donde encontraremos una informacion sobre el ?
+obteniendo la categoria de la receta via llave foranea FK
+en el modelo Receta.php =>I1
+ .................
+-en el tinker podemos probarlo
+ >>> $receta=Receta::find(3);       //probaremos con el id 3 del modelo Receta
+ >>> $receta->categoria             //me devuelve el modelo de la CategoriaReceta
+-ahora mostraremos en el blade =>index.php (cambiando la $categoria_id por $categoria->nomnbre)
+_____________________________________________________________________________
+6. guardando Recetas con modelo
+-ahora sin utilizar el DB::table.....
+-con el modelo es similar pero mas corto...en el controller =>J1
+-asi como en el modelo usuario tiene su $fillable=[ '' , '' ,''] tambien lo tiene que tener 
+el modelo Receta
+_____________________________________________________________________________
+==========================MOSTRANDO LAS RECETAS========================
+
+1. metodo show
+_____________________________________________________________________________
+3. INTEGRAR librerias externas
+-para instalar en la consola nos ubicamos donde se encuentra el package.json
+    npm i --save moment
+-una vez instalado la forma de integrar a laravel es la siguiente
+    (en resources->js->bootstrap.js) =>K1
+-agregamos js en el proyecto colocando el codigo 
+    (window.moment = require('moment'));
+_____________________________________________________________________________
+4. creando componente de Vue para la fecha con MomentJS
+
+-vamos a comentar la linea del app.js (Vue.component('.....))
+-esto se va a reflejar en el show.blade con la etiqueta <fecha-receta></fecha-receta>
+-dentro del FechaReceta.vue en export default {} dentro vueJs viene una api...por ejemplo hay uno que se llama mounted
+-SE CREA el codigo para cambiar el formato de fecha y colocando en el componente =>FechaReceta.vue
+_____________________________________________________________________________
+
+5. creando una relacion para mostrar el Autor
+
+-En el modelo receta.php => L1  // similar a I1
+-Aumentandole el , 'user_id'  //le ayudas a laravel a especificar en que campo se encuentra y se esta guardando esa relacion
+-mostrando el autor en show.blade
+_____________________________________________________________________________
+6. Mostrar las recetas a usuarios no autenticados
+-la idea es que el show de las recetas sea publico
+-si quiero editar eliminar... debe de ser privado// laravel lo hace muy sencillo
+-en el controller se encuentra autenticado pero queremos mantener abierto el show como publico 
+para esto en el middleware('auth',['except'=>['show']]);  ///con esto el show no va a requerir autenticacion
+_____________________________________________________________________________
+7. para solucionar el ´problema de TRIX-Editor
+-se puede ver que el archivo que compila en app.blade.php ---> js/app.js tiene el defer(lo que hace es esperar lo que todo el contenido
+de la pagina este cargado html y despues carga ese archivo JS...) para esto agregamos el defer en el scrip de create.blade.php
+-tambien vemos que en vue no sigue algunas normas...podemos ver la etiqueta trix-editor similar a la etiqueta fecha-receta
+con esto vueJs piensa quie trix-editor es un componente al que no puede entrar para hacer esto es 1(UNO) crear un componente en el VueJs con ese trix editor
+o 2(DOS) es abrir el app.js y colocar Vue.cofig.ignoreElements=['']   //podemos pasar etiquetas que pueden parecer componentes de VueJs pero no lo son...con esto 
+le decimos trix.editor no es un componente entonces ignoralo
+_____________________________________________________________________________
+
+=========================EDICION DE RECETAS =====================================
+
+1. El metodo Edit
+-la estructura para edit tiene que ser de tipo GET asi que en web.php
+-como las categorias no estan disponibles entonces en el controller similar al create colocamos el metodo all  =>M1
+_____________________________________________________________________________
+2. primeros pasos con el formulario 
+-pasar pasar la informacion que vamos a editar y llenar los campos automaticamente
+-en la funcion edit del controller se ve que tiene una instancia (Receta $receta) =>N1
+_____________________________________________________________________________
+3. registrando el metodo para editar y agregando seguridad
+-usaremos el metodo update...asi que en web.php
+-la diferencia de put es que patch es solamente una actualizacion parcial mienras que put es total...usualemte tiene mas poder el put ya que puede modificar todo o parcial gg 
+-en el edit.blade.php cambiamos del action porque tenemols que pasarle recetas.update y tambien el id...tendria la sisntaxis muy similar al de index.blade en los a href
+-sin embargo el PUT no es soportado por el html ...solo soporta get o post por lo tanto mantenemos como POST ...pero adicional agregamos la directiva que laravel nos da con @method('PUT' )
+_____________________________________________________________________________
+4. Guardadno la receta Editada en la BD
+- primero validamos copiando similar al create
+- la imagen no sera obligatorio validar
+
