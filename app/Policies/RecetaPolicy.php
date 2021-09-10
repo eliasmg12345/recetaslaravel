@@ -53,7 +53,7 @@ class RecetaPolicy
      */
     public function update(User $user, Receta $receta)
     {
-        //revisa el usuario autenticado es el mismo que cero la receta
+        //N1. revisa el usuario autenticado es el mismo que creo la receta
         return $user->id===$receta->user_id; 
     }
 
@@ -67,6 +67,10 @@ class RecetaPolicy
     public function delete(User $user, Receta $receta)
     {
         //
+        //. revisa el usuario autenticado es el mismo que creo la receta
+
+        return $user->id===$receta->user_id; 
+
     }
 
     /**

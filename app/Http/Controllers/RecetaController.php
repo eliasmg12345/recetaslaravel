@@ -178,7 +178,7 @@ class RecetaController extends Controller
      */
     public function update(Request $request, Receta $receta)
     {
-        //REVISANDO EL POLICY
+        //N2. REVISANDO EL POLICY..(con el nombre del metodo en el policy en este caso es el update y le pasas la $receta actual)
         $this->authorize('update',$receta);
 
         //validando
@@ -221,6 +221,10 @@ class RecetaController extends Controller
      */
     public function destroy(Receta $receta)
     {
-        //
+        //ejecutando el policy 
+        $this->authorize('delete',$receta);
+        //eliminar  la receta
+        $receta->delete();
+        return redirect()->action([RecetaController::class,'index']);
     }
 }

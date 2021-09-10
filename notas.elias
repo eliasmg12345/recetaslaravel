@@ -215,4 +215,96 @@ _____________________________________________________________________________
 4. Guardadno la receta Editada en la BD
 - primero validamos copiando similar al create
 - la imagen no sera obligatorio validar
+_____________________________________________________________________________
+5. asegurarse que solo quien creoi esa receta puede editarla
+- en laravel hay los policy -...son formas de autorizar a un usuario de relizar ciertaws acciones,,,eje de actualizar o eliminar registros
+-para eso en l a consola ... le atas con el modelo (-m <nombreModelo>)
+    php artisan make:policy RecetaPolicy -m Receta
+-los policy se gusrdan en la app
+-existen metodos creados ...el que nos interesa es el update... en el RecetaPolicy.php ==> N1
+-luego en el controller revisamos el policy en RecetaController.php =>N2
+_____________________________________________________________________________
+========================ELIMINAR RECETAS===================================
+
+1. Eliminando recetas  de la Base de datos
+-en el route web.php tiene que ser delete
+-como el balde de html no soporta el delete...tenemos que colocar un @method('DELETE)
+-no olvidar que la pagina expira por lo tanto se pone el token @csrf 
+-para eliminar tambien podemos usar el POLICY en cual podemos asegurar que el usuario que vba eliminar es quien lo creo
+el codigo es el mismo  de N1
+
+_____________________________________________________________________________
+2. Creando un componente de Vue para eliminar una receta.
+-eliminando una receta utilizando axios vueJs y tambien SweetAlert
+-por lo tanto vamos a elim o comentar el form de delete en el index.blade.php para llevarnos al componente de Vue
+-en ->  js->components->EliminarReceta.vue ....sin olvidar añadir en el app.js para registrar nuestro nuevo componente
+-para pasarle su Id en EliminarReceta.vue en EliminarReceta.vue =>.... en el blade index de la etiqueta <eliminar-receta> podemos pasarle un props--- este prop va a tener receta-id y va a ser igual al valor de la $rec->id
+_____________________________________________________________________________
+3. Creando un metodo para eliminar una receta
+-escuchando por un evento el eliminar recetas ...para eso en la etiqueta input del vue Eliminar colocamos v-on:click="  "
+-es lo mismo poner el evento === v-on: === que === @ ===
+_____________________________________________________________________________
+4. Agregano SweetAlert
+-vamos a instalar de la pagina https://www.npmjs.com/package/vue-sweetalert2
+-pero ya integrada con vueJs ejecutando en la consola para instalar la dependencia
+    npm install -S vue-sweetalert2
+-luego importamos en la app.js ---luego usamos con Vue.use()........//importante (si no funciona el impor comprobar con otro segun la pagina )
+-ahora en el motodo de eliminarReceta en el .vue pegamos el contenido de sweetalert2  
+_____________________________________________________________________________
+5. ElimiNAR Receta con Vue y SweetAlert
+-eliminar una peticion con axios //para esos e podria poner axios.delete pero laravel y vue no lo soporta //por lo tanto ponemos post hacia esa ruta ` /`
+-importante un delete con axios tienes que pasarle un parametro 
+-axios funcoina con promes asi que ponemos el then catch
+-PARA QUE confirme la eliminacion el mensaje lo ponemos en el .then
+-para que elimine la receta del dom. viendo el $el tenemos que eliminar el bloque input ..para eso vamos al padre al padre al padre luego eliminamos el tr que es su hijo
+_____________________________________________________________________________
+===============================CREANDO PERFILES PARA LOS USUARIOS=======================================
+
+1. creando Modelo, Migracion y Controlador para Perfiles
+    php artisan make:model Perfil -mcs
+-asignando campos a la tabla perfils 
+_____________________________________________________________________________
+2. Creando una relacion entre USUARIOS y Perfiles
+-en este caso va a ser una relacion de uno a uno//Un usuario va a tener un perfil por lo tanto hasOne en el modelo User.php =>O1
+-y viceversa para el moldeo Pefil =>O2...y como es una relacion unversa se usa belongsTo()
+-nos interesa crear el perfil una vez que haya sido creado ..para eso lo aremos con los eventos de eloquent en el sigte.
+_____________________________________________________________________________
+3. Creando un Perfil en cuanto un usuario se registra con Events
+-estos erventos se agregan en lo que vienen siendo el modelo de Usuario  
+- evento que se ejecuta cuando un usuario es creado 
+-la sintaxis es de parent en el Modelo User.php => P1 //como muestra en la documentacion de laravel  ( https://laravel.com/docs/8.x/eloquent#events-using-closures )
+-ahora para probar crearemos un uevo registro no olvidar primero hacer un roollback si se quiere
+_____________________________________________________________________________
+4. Crear Perfiles desde el Seeder
+- primero haremos un migrate:fresh
+-en el seeder de User crearemos una nuevas variables ..ya que contamos con modelos sera pocas lineas de codigo =>Q1
+_____________________________________________________________________________
+=============================== FUNCIONALIDAD DE PERFILES ===============================
+
+1. Mostrando Perfiles
+-comenzamos con el route web.php
+-en el controller no utilizaremos el index,crate y store...
+-en el modelo de Perfil tenemos que indicar el user_id a la relacion belongsTo...con eso se lo trae el registro a perfil
+_____________________________________________________________________________
+2. Creando el Formulario para editar un perfil
+-similar al edit de recetas
+_____________________________________________________________________________
+3. Validación del Perfil y otros ajustes
+-la peticion se va a mandar hacia update ...en web.php se usa el PUT
+-no olvidar eu en el form para que soporte imagenes se incluye el enctype
+-ademas el @method('put') y para el token el @csrf
+-validar, si sube imagen  y guardar esa informacion , luego redireccionar en el controller =>R1
+_____________________________________________________________________________
+4. Guardando la información del Formulario en el Perfi
+-practicamente tenemos que actualizar en dos lugares ...ususarios y Perfiles
+-primero tendriamos que asignar nombre y URL luego asignar  biografia e imagen porque estan en tablas diferenetes..en el controlelr =>S1
+_____________________________________________________________________________
+5. Guardar la imagen del Perfil
+-vamos a poner un if con el request en el campo imagen en el controller =>T1
+-el codigo es el mismo que se encuentra en receta controller ...no olvidar importar el facade de imagen
+_____________________________________________________________________________}
+========================ULTIMOS AJUSTES PARA EL PANEL DE ADMINISTRACION ===================
+
+1. Enlazando el Panel de Administración con Ver Perfil
+
 

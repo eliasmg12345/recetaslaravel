@@ -24,9 +24,20 @@
                         <td>{{$rec->titulo}}</td>
                         <td>{{$rec->categoria->nombre}}</td>
                         <td>
-                            <a href="" class="btn btn-danger">Eliminar</a>
-                            <a href="{{route('recetas.edit',['receta'=>$rec->id])}}" class="btn btn-dark">Editar</a>
-                            <a href="{{route('recetas.show',['receta'=>$rec->id])}}" class="btn btn-success">Ver</a>
+                            {{--
+                            <form action="{{route('recetas.destroy',['receta'=>$rec->id])}}" method="post">
+                                @csrf
+                                @method('DELETE')
+                                <input type="submit" class="btn btn-danger d-block w-100 mb-2" value="Eliminar &times;">
+                            </form>    
+                            --}}
+                            <eliminar-receta
+                                receta-id={{$rec->id}}
+                            ></eliminar-receta>                     
+
+                            
+                            <a href="{{route('recetas.edit',['receta'=>$rec->id])}}" class="btn btn-dark d-block mb-2">Editar</a>
+                            <a href="{{route('recetas.show',['receta'=>$rec->id])}}" class="btn btn-success d-block mb-2">Ver</a>
                         </td>
                     </tr> 
                 @endforeach
