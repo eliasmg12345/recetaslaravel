@@ -20,7 +20,7 @@ class RecetaController extends Controller
         //con auth estamos habilitando middleware  una vez que se crea
         //uina instancia con recetaController por tanto protege los demas metodos
         //ya no se puede acceder 
-        $this->middleware('auth',['except'=>['show']]);
+        $this->middleware('auth',['except'=>['show','search']]);
     }
 
 
@@ -31,12 +31,22 @@ class RecetaController extends Controller
      */
     public function index()
     {
+        
+
         // G1 vamos a acceder a la relacion recetas
         //es lo mismo acceder Auth:: que con auth()->
         //Auth::user()->recetas->dd();
         //pasaremos este objeto a la vista con el with
-        $recetas=auth()->user()->recetas; 
-        return view('recetas.index')->with('recetas',$recetas);
+        //$recetas=auth()->user()->recetas; 
+
+        //W1. Recetas con paginacion y comentando el G1...usando el ELOQUENT
+        //FA1
+        $usuario=auth()->user();
+        $recetas=Receta::where('user_id',$usuario->id)->paginate(1);
+        return view('recetas.index')
+        ->with('recetas',$recetas)
+        ->with('usuario',$usuario);
+                                    
     }
 
     /**
@@ -148,8 +158,15 @@ class RecetaController extends Controller
      */
     public function show(Receta $receta)
     {
-        //
-        return view('recetas.show',compact('receta'));
+        //CA1 OBTENER Si el usuario actual le gusta la receta y esta autenticado... como en el metodo megusta nos va a adevolver un array grande ..laravel tiene un metodo contains....de esa forma vas a revisar...si le pasas un id va a verificar si existe en los me gusta 
+        //en otras palabras si el usuario esta autenticado vamos a revisar si ya lo tiene como megusta ----si el contrins me retorna que no entonces es folse...pero si no esta autenticado tambien me pasa false
+        //like le pasamos al show.blade    
+        $like=(auth()->user()) ? auth()->user()->meGusta->contains($receta->id):false;
+
+        //DA1. PASA LA cantidad de likes a la vista----en laravel existe un helper que nos diga cuantos elementos hay en este arreglo 
+        $likes=$receta->likes->count();
+
+        return view('recetas.show',compact('receta','like','likes'));
     }
 
     /**
@@ -160,6 +177,9 @@ class RecetaController extends Controller
      */
     public function edit(Receta $receta)
     {
+        //V2. REVISANDO EL POLICY..(con el nombre del metodo en el policy en este caso es el update y le pasas la $receta actual)
+        $this->authorize('view',$receta);
+
         //
         //M1. Obteniendo categorias con modelo. el metodo all nos va a trare todas las 
         //categorias que hay en essa tabla
@@ -226,5 +246,19 @@ class RecetaController extends Controller
         //eliminar  la receta
         $receta->delete();
         return redirect()->action([RecetaController::class,'index']);
+    }
+
+    //MA2...
+    public function search(Request $request)
+    {
+        //recuerda que el buscar viene del name del input
+        //$busqueda=$request['buscar'];
+        //otra forma de buscar es con la funcio get
+        $busqueda=$request->get('buscar');
+
+        //NA1.-.le pasamos el operador like 
+        $recetas=Receta::where('titulo','like','%'.$busqueda.'%')->paginate(1);
+        $recetas->appends(['buscar'=>$busqueda]);
+        return view('busquedas.show',compact('recetas','busqueda'));
     }
 }

@@ -307,4 +307,158 @@ _____________________________________________________________________________}
 
 1. Enlazando el Panel de Administración con Ver Perfil
 
+-como usuarios es una vista que existe ya en tu template de Blade ...una forma mas rapida de  ver a los usuarios en el blade es {{Auth::user() }}
+-para agregar una nueva parte en la parte superior bajjo del Login ...en app.blade.php hacemos algunas inclusiones 
+_____________________________________________________________________________
+2. Añadiendo Iconos a nuestro panel
+-de la pagina https://heroicons.dev/?query=user copiaremos los codigos de las figuras al nuevo archivo creado ...ahi llevaremos todos los a href para que no se vea mucho codigo
+-para eso creamos un nuevo archivo blade ui.navegacion.php y luego hacemos el include en el index.blade.php tambien en los edits.blade
+_____________________________________________________________________________
+3. Creando Policy para edición de Perfiles
+-en la consola...para que verifique que modelo va a ser el policy sera el perfil
+    php artisan make:policy PerfilPolicy -m Perfil
+-ahora lo unico que nos interesa proteger es el Update en el PerfilPolicy.php =>U1
+-ahora lo ejecutamos en el controlador de perfil en la parte de update =>U2
+-PROTEGIENDO EL EDIT ...en el controlador de perfil para crear el constructor => U3
+-Ahora si alguien esta entrando a un perfil que no es de El entonces hay que revisar en el policy de Perfil...usando la misma validacion ... en la parte de view ya que solo bloquea ciertas partes =>U4
+la diferencia con update se ejecuta hasta que alguien este actualizando algo---pero nosotros queremos bloquear que vean algo
+-en el controlador del perfil en el metodo de edit (que es el que queremos bloquear) ponemos el autorize bloqueando el view  => U5
+_____________________________________________________________________________
+4. Evitar que otra persona vea el formulario de edición
+- trabajando en el policy de recetas pero en la parte de view =>V1 Y luego posterior añadir el autorize en su controller en la parte del edit=>V2
+_____________________________________________________________________________
+5. Paginación de las Recetas
+-utilizando los modelos vamos a modificar el index de receta.controller.php =>W1
+-luego en el index.blade.php al final agregamos links()=>W2
+_____________________________________________________________________________
+6. Mostrando las recetas en Perfil
+-importando el modelo receta en el controlador de perfil y usando eloquent => X1 en el
+_____________________________________________________________________________
+=====================Almacenando Me Gusta a las Recetas=============================
 
+1. Utilizando una Animación para los Me Gusta
+-se creara un componente de vueJs en el show.blade.php de recetas luego en los diferentes ficheros => Y[i]
+_____________________________________________________________________________
+2. Creando una tabla Pivote para almacenar los Likes
+-crearemos otra migracion y que tambien nos cree la tabla likes_receta
+    php artisan make:migration create_likes_receta_pivot_table --create likes_receta
+-luego añadiremos campos extra //laravel usa otra funcion mas compacta en cuanto a llaves foraneas --- ->constrainded ();
+-la forma de hacer una migracion si borrar lo que ya tienes es ....
+    php artisan migrate --path=/database/migrations
+_____________________________________________________________________________
+3. Creando una relación para los Likes
+-cada usuario puede guardar muchas recetas como megusta , tambien cada publicacion puede tener muchos likes //ambas utilizan el belongsToMany
+-primero en el modelo de recetas =>Z1 //añadiendo cierta informacion ..diciendo que nuestra tabla  pivote es likes_receta
+-segundo en el modelo de usuario =>Z2 //añadiendo cierta informacion ..diciendo que nuestra tabla  pivote es likes_receta
+-haciendo pruebas con el tinker
+_____________________________________________________________________________
+4. Almacenar o Quitar los Likes con un Toggle
+-creando un controlador que se va a encargar de almacenar de los meGusta y noMeGusta //muy importante como va almacenar los likes de una receta le vamos a agregar un modelo con  -Receta
+    php artisan make:controller LikesController -m Receta
+-solo vamos a requerir update  porque almacena los nuevos registros //el update  usualemte esta asociado con el metodo POST 
+-asi que en el web.php =>AA1 ....esta va a ser la url a la cual le enviaremos la peticion del axios 
+-en laravel tenermos que tomar el usuario que esta autenticado y despues acceder a la parte de meGusta para ir guardando los megusta. en el store de Likescontroller =>AA2
+_____________________________________________________________________________
+5. Almacenar o Quitar los Likes de la BD
+-en el LikeButton.vue =>BA1
+-el el show.blade de recetas en la etiqueta del like-button le pasaremos el id  de la receta=>BA2...y esta receta-id le tenemos que pasar via props al BA1
+_____________________________________________________________________________
+6. Mostrando el Estado del Like al cargar la receta
+-vamos a crear una variable en el show de RecetaControler =>CA1
+-esta variable $like le pasaremos al vue dentro del componente like-button
+-para que la animacion se mantenga usamos la directiva de vue en la etiqueta <span>  el :class="{}" con el scss que activa el color
+_____________________________________________________________________________
+7. Mostrando la Cantidad de Likes de una receta
+-en la receta controller despues de CA1 =>DA1
+-esa variable le pasamos al componente de vuejs
+-esa nueva variable en el vue va a estar asociado con una nueva propiedad llamada computed -....vamos acrear una funcion llamada cantidadLikes: function(){}
+-como los computes son un poco mas estaticos ...para se recomienda hacer mas con un data:
+_____________________________________________________________________________
+8. Prevenir que las personas no puedan darle Like sino han iniciado sesión
+-en el LikesController =>EA1 ...Utiizar el mismo codigo para proteger un componente ...(--- usando constuctor y el middleware---)
+-para que no muestre un error 401 en el vuejs crearemos una vista para que invite a crear una nueva cuenta...en el .catch =>
+-para que el iconito no se marque hacemos alguns ajustes en codigo ..dentro del return del data: usamos la propiedad isActive: ...eso se cambia tambien en el class de span 
+_____________________________________________________________________________
+9. Mostrar las Recetas que el usuario le ha dado Like en el Panel
+- en la RecetaController en el metodo index =>FA1..luego en el index de recetas =>FA2
+_____________________________________________________________________________
+======================16. Red Social Recetas - Mostrando las Recetas en la página Principal ===============================
+
+1. Creando el Controlador para la Vista de Inicio 
+    php artisan make:controller InicioController
+-y creando el blade index y cambiando el home de web.php
+-agregar el scss en _recetas.scss de la pagina https://gist.github.com/juanpablogdl/a53dadc2040ad6d35b2d09aa0b8d4758
+_____________________________________________________________________________
+2. Obteniendo las últimas recetas
+-consultando las recetas mas nuevas y mostrar en la pagina principal
+-en laravel existe un Query Builder //utilzia consultas de sql mas comun 
+-en nuestro caso en el controller de inicio vamos a hacer una consulta =>GA1
+_____________________________________________________________________________
+3. Mostrando la información de las Recetas
+-para eliminar el codigo html usamos el {{strip_taps ($n)}}
+-para qeu no se vea mucha letra vamos a utilizar unos helpers de LARAVEL...usaremos uno para strings  Str::words ( , 50 )   //existen varios helpers de Laravel
+_____________________________________________________________________________
+4. Añadiendo OWL Carousel
+-instalando Carousel
+    npm i owl.carousel
+-la hoja de estilos la buscaremos por cdnjs   https://cdnjs.com/libraries/OwlCarousel2
+-pegarlo en el index.blade de inicio
+-para agregar el carrusel al proyecto se hace en dos lugares 
+- en el archivo webpack.mix.js //este lo que hjace es tomar el archivo de entrada de app.js como JS   //mix convierte en assests con webpack para jquery  para vueJs para Bootsatrap etc
+en el archivo es que le agregas como configuracion y le dices que el app.js  quieres precargarle  con .autoload y va a ser un objeto y  vamos a cargar Jquery porque carrusel lo requiere =>HA1
+no requieres instalarlo porque laravel ya lo tiene 
+-luego haciendo algunas configuraciones en el app.js //importando
+-con esto se ve que funciona en el frontend de nuestro sitio web
+-ahora en el blade de inicio integramos en la clase del div el owl-carousel y owl-theme
+-luego en el app.js integramos el jQuery('.owl-carousel').owlCarousel({});  ...y dentro de este podemos poner los estilos como; margin:10 y los items deacuerdo al tamaño
+_____________________________________________________________________________
+5. Obtener Las Recetas por su categoría
+-en el controller de inicio => IA1
+-para que los espacios no causen problemas utilizaremos un helper de laravel,,donde te crea un slug 
+_____________________________________________________________________________
+6. Mostrando las Categorías de las Recetas
+-ahora para quitar ese guion usaremos la sintaxis de php  str_replace que lo que hace es buscar y reemplazar
+-luego poniendo dos foreach ya que es de 3 dimensiones
+_____________________________________________________________________________
+7. Mostrando cada Receta
+-
+_____________________________________________________________________________
+8. Obtener y Mostrar las Recetas más votadas
+- EN EL CONTROLADOR ed inicio =>JA1
+- en el index.blade vamos a cortar lo que es dentro del foreach ..creando un archivo nuevo en el ui con el nombre de receta.blade.php...luego ponemos el include en el index
+_____________________________________________________________________________
+========================17.  Últimos Ajustes, Mostrar Receta por Categoría y Buscador ===================
+
+1. Creando un Menú de Recetas
+-los services providers de laravel ...tenemos  que tener en cuenta que todo lo que hicimo con laravel desde autenticacion conexion base de datos hasta traducciones se realizo desde algo llamado providers 
+si abrimos config->app.php se puede ver la lista de providers.... todas esas funcionalidades llega por un providers 
+-asi que vamos a crear un providers para consultar las categorias  y pasarlas a todas las vistas 
+    php artisan make:provider CategoriasProvider
+-estos providers se encuentran en app->providers //vemos que tiene dos metodos 
+-en register vas a colocar las dependencias que va a ejecutar al configurar tu proyecto...es algo que no depende de nada de laravel ....entonces register registra todo antes que laravel comience 
+-en boot se va a ejecutar todo cuando la aplicacion esta lista ...es lo que vamos a utilizar para ejecutar la base de datos y pasar a la lista ...necestias hacer uso de algo de laravel
+- en CategoriasProvider.php =>KA1
+- para importar el view solo se pone use View
+-el codigo por si solo no va a funcionar ..tenemos que registrar nuestro propio provider ..parea eso incluimos en el config->app.php 
+_____________________________________________________________________________
+2. Mostrando las Recetas por categoría.
+-creando el controlador
+    php artisan make:controller CategoriasController
+-configurando en el web.php
+-en el controller =>LA1
+_____________________________________________________________________________
+3. Creando un Buscador
+-por ejemplo en el app.blade.php en script el js/app.js utiliza el asset de la misma forma utiliza para imprimir la hoja de estilos
+ese asset hace referencia hacia la carpeta public ...si quieres añadir imagenes a tu proyexto tienes que crear una carpeta llamada images 
+-como abrir una imagen estatica ?...en el index de inicio ...hay dos formas muy comun de hacerlo //una es usando el url =>MA1//otra forma ers usando el asset ..es otro helper que apunta hacia la carpeta donde se estan almacenando  las imagenes los js y css 
+-nuestro buscador va a tener una imaden de fondo ...ahora vamos a crear una seccion yield en el app.blade.php llamada hero
+-y en el index.blade.php usamos esa seccion hero
+-luego en el web.php agregamos buscardor de receta ... en el controladorReceta ...
+-luego en el controlador de receta =>MA2 ...no olvidar poner en el form de hero el action={}
+_____________________________________________________________________________
+4. Buscando Recetas por lo que el usuario coloque en el Input
+-podemos utilizar el like de la base de datos ---laravel lo funciona bien ...en RecetaController.php en el metodo search =>NA1...
+-para mejorar la busqueda usaremos el metodo appends 
+_____________________________________________________________________________
+5. Últimos Ajustes
+-colocando enlaces en el show.blade de recetas

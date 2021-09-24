@@ -56,7 +56,6 @@ class UsuarioSeeder extends Seeder
             'password'=>Hash::make('12345678'),
             'url'=>'http://elias.com'
         ]);
-        $user->perfil()->create();
 
         $user2=User::create([
             'name' => 'sara',
@@ -64,7 +63,6 @@ class UsuarioSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'url' => 'http://sara.com'
         ]);
-        $user2->perfil()->create();
 
         $user3=User::create([
             'name' => 'vivi',
@@ -72,6 +70,5 @@ class UsuarioSeeder extends Seeder
             'password' => Hash::make('12345678'),
             'url' => 'http://vivi.com'
         ]);
-        $user3->perfil()->create();
     }
 }

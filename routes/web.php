@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\CategoriasController;
+use App\Http\Controllers\InicioController;
+use App\Http\Controllers\LikesController;
 use App\Http\Controllers\PerfilController;
 use App\Http\Controllers\RecetaController;
 use Illuminate\Support\Facades\Route;
@@ -15,9 +18,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [InicioController::class,'index'])->name('inicio.index ');
 
 Route::get('/recetas',[RecetaController::class,'index'])->name('recetas.index');
 Route::get('/recetas/create',[RecetaController::class,'create'])->name('recetas.create');
@@ -27,10 +28,20 @@ Route::get('recetas/{receta}/edit', [RecetaController::class,'edit'])->name('rec
 Route::put('recetas/{receta}', [RecetaController::class,'update'])->name('recetas.update');
 Route::delete('recetas/{receta}',[RecetaController::class,'destroy'])->name('recetas.destroy');
 
+Route::get('categoria/{categoriaReceta}',[CategoriasController::class,'show'])->name('categorias.show');
+
+//buscador de recetas
+Route::get('/buscar',[RecetaController::class,'search'] )->name('buscar.show');
+
+
 Route::get('perfiles/{perfil}',[PerfilController::class,'show'])->name('perfiles.show');
 Route::get('perfiles/{perfil}/edit', [PerfilController::class,'edit'])->name('perfiles.edit');
 Route::put('perfiles/{perfil}', [PerfilController::class,'update'])->name('perfiles.update');
 
+
+
+//AA1. Almacena los likes de las recetas ...esta va a ser la url a la cual le enviaremos la peticion del axios
+Route::post('recetas/{receta}',[LikesController::class,'update'])->name('likes.update');
 
 Auth::routes();
 

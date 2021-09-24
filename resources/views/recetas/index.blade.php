@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('botones')
-    <a href="{{route('recetas.create')}}" class="btn btn-primary mr-2 text-white">Crear Receta</a>
+    @include('ui.navegacion')    
 @endsection
 
 @section('content')
@@ -45,5 +45,30 @@
                 
             </tbody>
         </table>
+        {{-- W1 agreando paginacion--}}
+        <div class="col-12 mt-4 justify-content-center d-flex">
+            {{$recetas->links()}}
+        </div>
+        {{-- FA2 añadiendo la parte de me gustas --}}
+        <h2>Recetas que te gustan</h2>
+        <div class="col-md-10 mx-auto bg-white p-3">
+            @if (count($usuario->meGusta)>0)
+                <ul class="list-group">
+                    @foreach ($usuario->meGusta as $receta)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <p>{{$receta->titulo}}</p>
+                            <a class="btn btn-outline-success text-uppercase font-weight-bold" href="{{route('recetas.show',['receta'=>$receta->id])}}">Ver</a>
+                        </li>
+                        
+                    @endforeach
+                </ul>
+            @else
+                <p class="text-center">Aun no tienes recetas guardadas
+                    <small> Dale megusta a las recetas y apareceran aqui</small>
+                </p>
+            @endif
+
+            
+        </div>
     </div>
 @endsection

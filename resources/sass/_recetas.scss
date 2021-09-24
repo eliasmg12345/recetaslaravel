@@ -1,17 +1,125 @@
-body{
+body {
     font-family: $parrafos-font-family;
+    background-color: #f4f0f0;
 }
-
-trix-editor{
-    min-height: 200px;
+trix-editor {
+    min-height: 400px;
 }
-
-.bg-primary .navbar-brand{
-
+.bg-primary .navbar-brand {
     color: white;
     font-family: $font-family-sans-serif;
-    font-size: 1.5rem;
-    &:hover{
+    font-size: 2rem;
+    font-family: 'Fredoka One', cursive;
+    color: #FFF!important;
+    font-size: 2.4rem;
+    text-decoration: none;
+    &:hover {
         color: white;
     }
 }
+.icono {
+    width: 16px;
+}
+.barra {
+    background-color: #ED4646!important
+}
+.fecha {
+    color: #ED4646 !important
+}
+.receta-meta p {
+    font-size: 12px;
+    font-weight: bold;
+}
+.navbar-light  {
+    .navbar-nav {
+        .nav-link{
+            color: #FFF;
+            font-size: 1.4rem;
+                &:focus,
+                &:hover {
+                    color: #FFF;
+            }
+        }
+    }
+}
+
+.titulo-categoria {
+    font-family: 'Cabin', sans-serif;
+    color: #333;
+    font-size: 1.8rem;
+    border-bottom: 3px solid #ED4646 !important;
+    display: inline-block;
+    padding-bottom: .5rem;
+    padding-right: 2rem;
+}
+.btn-receta,
+.btn-receta:hover {
+    background-color: #ED4646 !important;
+    border: none;
+}
+
+
+.owl-carousel .owl-stage { display: flex; }
+.card {
+    display: flex;
+    flex: 1 0 auto;
+    height: 100%;
+}
+.card-body {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.categorias-bg {
+    background-color: #fff ;
+    .nav-link {
+        color: #222!important;
+        display: inline-block;
+        padding-top: .5rem;
+        padding-bottom: .5rem;
+        overflow: hidden;
+        position: relative;
+        text-decoration: none;
+        font-size: 1.2rem!important;
+        text-transform: uppercase;
+        font-weight: bold;
+        &:before, &:after {
+            content: '';
+            position: absolute;
+            transition: transform .5s ease;
+        }
+        &:before {
+          left: 0;
+          bottom: 0;
+          width: 100%;
+          height: 4px;
+          background: #ED4646;
+          transform:  translateX(-100%);
+        }
+        &:hover:before {
+          transform:  translateX(0);
+        }
+    
+    }
+}
+
+
+
+.hero-categorias {
+    background-image: linear-gradient(to bottom, rgba(70, 70, 70, 0.4), rgba(53, 53, 53, 0.571)),
+url('../images/pollofrito.jpeg');
+    height:30rem;
+    background-size: cover;
+    background-position: top center;
+    .texto-buscar {
+        p {
+            font-size: 1.4rem;
+            color: #FFF;
+        }
+    }
+}
+
+
